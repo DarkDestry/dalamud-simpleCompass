@@ -1,0 +1,62 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <ProjectGuid>{13C812E9-0D42-4B95-8646-40EEBF30636F}</ProjectGuid>
+    <AssemblyName>simpleCompass</AssemblyName>
+    <TargetFramework>net472</TargetFramework>
+    <AssemblyTitle>simpleCompass</AssemblyTitle>
+    <Product>SimpleCompass</Product>
+    <Copyright>Copyright © DarkDestry 2020</Copyright>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <Import Project="..\packages\ILRepack.2.0.18\build\ILRepack.props" Condition="Exists('..\packages\ILRepack.2.0.18\build\ILRepack.props')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\ILRepack.2.0.18\build\ILRepack.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\ILRepack.2.0.18\build\ILRepack.props'))" />
+  </Target>
+  <Target Name="ILRepack" AfterTargets="Build">
+    <ItemGroup>
+      <InputAssemblies Include="$(TargetPath)" />
+      <InputAssemblies Include="$(TargetDir)*.dll" Exclude="$(TargetPath)" />
+    </ItemGroup>
+    <Exec Command="$(PkgILRepack)\tools\ILRepack.exe /lib:$(DalamudLibPath) /out:$(TargetDir)$(TargetFileName) @(InputAssemblies, ' ')" />
+  </Target>
+  <ItemGroup>
+    <PackageReference Include="ILRepack" Version="2.0.18" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Dalamud">
+      <HintPath>$(AppData)\XIVLauncher\addon\Hooks\dev\Dalamud.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ImGui.NET">
+      <HintPath>$(AppData)\XIVLauncher\addon\Hooks\dev\ImGui.NET.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ImGuiScene">
+      <HintPath>$(AppData)\XIVLauncher\addon\Hooks\dev\ImGuiScene.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SharpDX.Mathematics">
+      <HintPath>$(appdata)\XIVLauncher\addon\Hooks\dev\SharpDX.Mathematics.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Net.Http" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\Data\simpleCompass.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+</Project>
